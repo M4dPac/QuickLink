@@ -7,7 +7,7 @@ from generate import generate_random_string
 
 class DatabaseManager:
     def __init__(self) -> None:
-        self.conn = sqlite3.connect('database.db')
+        self.conn = sqlite3.connect('../database.db')
         self.cursor = self.conn.cursor()
         self.cursor.execute('''
         CREATE TABLE IF NOT EXISTS links (

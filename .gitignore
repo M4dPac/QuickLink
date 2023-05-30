@@ -1,4 +1,6 @@
 .idea
-__pycache__/
 .env
-database.db
+/database.db
+/test_database.db
+**/.pytest_cache
+**/__pycache__/
