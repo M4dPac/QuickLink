@@ -14,7 +14,7 @@ CREATE_USER_TABLE_QUERY = '''
             )
             '''
 
-# апрос для сброса таблицы
+# Запрос для сброса таблицы
 DROP_USER_TABLE_QUERY = '''
         DROP TABLE IF EXISTS links
             '''
@@ -41,3 +41,8 @@ def test_write_to_db_by_command():
     with DatabaseManager(TEST_DB_URL) as client:
         # Делаем запись в бд
         client.execute_command(command, (short_url, long_url))
+        client.drop_table()
+
+
+if __name__ == '__main__':
+    pytest.main()

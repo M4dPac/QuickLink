@@ -9,15 +9,21 @@ class DatabaseManager:
     def __init__(self, db_url: str = '../database.db') -> None:
         self.db_url = db_url
 
+    def __len__(self):
+        command = ''' SELECT COUNT(*) FROM links; '''
+        self.execute_command(command)
+        length = self.cursor.fetchone()
+        return length[0] if length else 0
+
     def __enter__(self) -> 'DatabaseManager':
         self.conn = sqlite3.connect(self.db_url)
         self.cursor = self.conn.cursor()
         command = '''
                 CREATE TABLE IF NOT EXISTS links (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    short_url TEXT NOT NULL,
+                    short_url TEXT NOT NULL UNIQUE,
                     long_url TEXT NOT NULL
-                    )
+                    );
                     '''
         self.execute_command(command)
         return self
@@ -61,7 +67,7 @@ class DatabaseManager:
 
     def delete_url(self, url: str) -> None:
         command = f'''
-        DELETE FROM links WHERE shorturl = ?
+        DELETE FROM links WHERE shorturl = ?;
         '''
         self.execute_command(command, (url,))
 
@@ -73,13 +79,13 @@ class DatabaseManager:
 
     def __is_in_db(self, short_url: str) -> bool:
         command = f'''
-        SELECT short_url FROM links WHERE short_url = ?
+        SELECT short_url FROM links WHERE short_url = ?;
         '''
         self.execute_command(command, (short_url,))
         return bool(self.cursor.fetchone())
 
     def drop_table(self):
-        command = ''' DROP TABLE IF EXISTS links '''
+        command = ''' DROP TABLE IF EXISTS links; '''
         self.execute_command(command)
 
 
