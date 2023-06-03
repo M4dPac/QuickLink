@@ -1,24 +1,28 @@
 import re
 import sqlite3
 
-from config import HOST
+from config import HOST, DB_URL, TABLE_NAME
 from generate import generate_random_string
 
 
 class DatabaseManager:
     def __init__(self,
-                 db_url: str = '../database.db',
+                 db_url: str = DB_URL,
+                 *,
+                 table_name: str = TABLE_NAME,
                  creating: bool = False) -> None:
         '''
         Инициализация класса
-        :param db_url: Адрес БД
-        :param creating: Отвечает за создание таблицы
+        :param db_url: Адрес БД.
+        :param table_name: Имя таблицы.
+        :param creating: Отвечает за создание таблицы.
         '''
         self.db_url = db_url
+        self.table_name = table_name
         self.creating = creating
 
     def __len__(self):
-        command = ''' SELECT COUNT(*) FROM links; '''
+        command = f''' SELECT COUNT(*) FROM {self.table_name}; '''
         self.execute_command(command)
         length = self.cursor.fetchone()
         return length[0] if length else 0
@@ -42,8 +46,8 @@ class DatabaseManager:
         self.conn.commit()
 
     def create_table(self):
-        command = '''
-                CREATE TABLE IF NOT EXISTS links (
+        command = f'''
+                CREATE TABLE IF NOT EXISTS {self.table_name} (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     short_url TEXT NOT NULL UNIQUE,
                     long_url TEXT NOT NULL
@@ -54,14 +58,14 @@ class DatabaseManager:
     def get_and_add_short_url(self, long_url: str) -> str:
         short_url = self._generate_short_url()
         command = f'''
-        INSERT INTO links (short_url, long_url) VALUES (?, ?);
+        INSERT INTO {self.table_name} (short_url, long_url) VALUES (?, ?);
          '''
         self.execute_command(command, (short_url, long_url))
         return short_url
 
     def get_short_url(self, long_url: str) -> str:
         command = f'''
-        SELECT short_url FROM links WHERE long_url = ?
+        SELECT short_url FROM {self.table_name} WHERE long_url = ?
         '''
         self.execute_command(command, (long_url,))
         answer = self.cursor.fetchone()
@@ -70,7 +74,7 @@ class DatabaseManager:
 
     def get_long_url(self, short_url: str) -> str:
         command = f'''
-        SELECT long_url FROM links WHERE short_url = ?
+        SELECT long_url FROM {self.table_name} WHERE short_url = ?
         '''
         self.execute_command(command, (short_url,))
         answer = self.cursor.fetchone()
@@ -79,20 +83,20 @@ class DatabaseManager:
 
     def delete_url(self, url: str) -> None:
         command = f'''
-        DELETE FROM links WHERE shorturl = ?;
+        DELETE FROM {self.table_name} WHERE shorturl = ?;
         '''
         self.execute_command(command, (url,))
 
     def drop_table(self):
         commands = [
-            "DELETE FROM links;",
-            "DELETE FROM SQLITE_SEQUENCE WHERE name='links';",
+            f"DELETE FROM {self.table_name};",
+            f"DELETE FROM SQLITE_SEQUENCE WHERE name='{self.table_name}';",
         ]
         for command in commands:
             self.execute_command(command)
 
     def delete_table(self):
-        command = ''' DROP TABLE links; '''
+        command = f''' DROP TABLE {self.table_name}; '''
         self.execute_command(command)
 
     def _generate_short_url(self) -> str:
@@ -103,7 +107,7 @@ class DatabaseManager:
 
     def _is_in_db(self, short_url: str) -> bool:
         command = f'''
-        SELECT short_url FROM links WHERE short_url = ?;
+        SELECT short_url FROM {self.table_name} WHERE short_url = ?;
         '''
         self.execute_command(command, (short_url,))
         return bool(self.cursor.fetchone())
@@ -114,6 +118,6 @@ if __name__ == "__main__":
         short_url = client.get_and_add_short_url('google.com/')
         print(client.get_short_url('google.com/'))
         print(client.get_long_url(short_url))
-        client.execute_command("SELECT * FROM links")
+        client.execute_command(f"SELECT * FROM {TABLE_NAME}")
         print(client.cursor.fetchone())
         client.drop_table()
