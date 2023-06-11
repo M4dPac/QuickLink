@@ -1,6 +1,5 @@
 .idea
-.env
-/database.db
-/test_database.db
 .pytest_cache
-**/__pycache__/
+.env
+*.db
+__pycashe__

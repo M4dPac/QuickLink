@@ -102,12 +102,12 @@ class DatabaseManager:
     def _generate_short_url(self) -> str:
         while True:
             short_url = generate_random_string()
-            if not self._is_in_db(short_url):
+            if not self.is_url_in_db(short_url):
                 return short_url
 
-    def _is_in_db(self, short_url: str) -> bool:
+    def is_url_in_db(self, short_url: str) -> bool:
         command = f'''
-        SELECT short_url FROM {self.table_name} WHERE short_url = ?;
+        SELECT short_url FROM {self.table_name} WHERE short_url = ?;git 
         '''
         self.execute_command(command, (short_url,))
         return bool(self.cursor.fetchone())
