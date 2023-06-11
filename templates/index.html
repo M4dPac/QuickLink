@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>URL Shortener</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', path='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <form id="url-form" method="post" action="/">
+            <label for="url">URL:</label>
+            <input type="text" name="url" id="url" required>
+            <button type="submit">Shorten</button>
+        </form>
+
+    </div>
+    <div id="result"></div><span id="short-url"></span>
+    <script src="{{ url_for('static', path='js/script.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</body>
+</html>
