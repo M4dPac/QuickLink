@@ -12,10 +12,10 @@ class DatabaseManager:
                  table_name: str = TABLE_NAME,
                  creating: bool = False) -> None:
         '''
-        Инициализация класса
-        :param db_url: Адрес БД.
-        :param table_name: Имя таблицы.
-        :param creating: Отвечает за создание таблицы.
+        Class initialization
+        :param db_url: The address of the database.
+        :param table_name: The name of the table.
+        :param creating: Responsible for creating the table.
         '''
         self.db_url = db_url
         self.table_name = table_name
@@ -35,15 +35,20 @@ class DatabaseManager:
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
+        if exc_type is not None:
+            print(f"An error occurred: {exc_val}")
         self.conn.commit()
         self.conn.close()
 
     def execute_command(self, command: str, params: tuple = ()) -> None:
-        """Выполняет команду с параметрами"""
+        """Executes a command with parameters"""
         if self.conn is None:
             raise ConnectionError('Database is not connected')
-        self.cursor.execute(command, params)
-        self.conn.commit()
+        try:
+            self.cursor.execute(command, params)
+            self.conn.commit()
+        except sqlite3.Error:
+            raise sqlite3.Error(f"An error occurred while executing the command: \n{command = }\n{params = }")
 
     def create_table(self):
         command = f'''
