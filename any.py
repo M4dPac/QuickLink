@@ -4,11 +4,14 @@ from config import HOST
 
 
 def create_table():
+    ''' Creating a table at application initialization '''
+
     with DatabaseManager(creating=True):
         pass
 
 
 def drop_table():
+    ''' Dropping a table at application initialization '''
     with DatabaseManager() as client:
         client.drop_table()
 
@@ -28,4 +31,5 @@ def get_long_url(short_url: str) -> str:
 
 
 if __name__ == "__main__":
-    drop_table()
+    create_table()
+    # drop_table()

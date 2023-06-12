@@ -2,4 +2,4 @@
 .pytest_cache
 .env
 *.db
-__pycashe__
+__pycashe__/

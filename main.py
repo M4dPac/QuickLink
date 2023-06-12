@@ -17,13 +17,18 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
 
 
+@app.on_event("startup")
+async def on_startup():
+    await create_table()
+
+
 @app.get("/", response_class=HTMLResponse)
-async def form_post(request: Request):
+async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
 @app.get("/{short_url}")
-async def get_url(short_url: str):
+async def redirect_short_url(short_url: str):
     long_url = get_long_url(short_url)
     return RedirectResponse(url=long_url)
 
