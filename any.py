@@ -1,5 +1,4 @@
 from clients.sqlite3_client import DatabaseManager
-import urllib.request, urllib.error
 
 from config import HOST
 
@@ -26,13 +25,6 @@ def get_long_url(short_url: str) -> str:
             return HOST
         long_url = client.get_long_url(short_url)
     return long_url
-
-
-def is_url_status(url: str) -> int:
-    try:
-        return urllib.request.urlopen(url).status == 200
-    except urllib.error.URLError:
-        return False
 
 
 if __name__ == "__main__":

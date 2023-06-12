@@ -6,7 +6,8 @@ from pydantic import BaseModel
 import uvicorn
 from starlette.responses import RedirectResponse
 
-from any import create_table, get_shorten_url, get_long_url, is_url_status
+from any import create_table, get_shorten_url, get_long_url
+from validation import check_url_for_validity
 from config import HOST
 
 app = FastAPI(
@@ -29,7 +30,7 @@ async def get_url(short_url: str):
 
 @app.post("/url={url:path}")
 async def shorten_url(url: str):
-    if is_url_status(url):
+    if check_url_for_validity(url):
         shorten_url = get_shorten_url(url)
         return {"shorten_url": HOST + shorten_url}
     return {"shorten_url": "Wrong URL"}
