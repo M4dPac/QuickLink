@@ -1,42 +1,51 @@
 const form = document.querySelector('form');
 const container = document.querySelector('.container');
 
+// Обработчик события отправки формы
 form.addEventListener('submit', function(event) {
   // Предотвращаем стандартное поведение отправки формы
   event.preventDefault();
 
+  // Получаем данные формы
   const formData = new FormData(form);
   const url = formData.get("url")
+
+  // Формируем строку запроса с закодированным URL
   const queryString = "/url=" + fixedEncodeURIComponent(url);
+
   // Отправляем запрос AJAX, используя полученные данные формы.
-  // Например, можно отправить запрос на сервер с помощью fetch.
   fetch(queryString, {
     method: "POST",
     body: formData,
   })
   .then(response => {
+      // Проверяем статус ответа
       if (!response.ok) {
         throw new Error("Ошибка при выполнении запроса");
       }
+      // Преобразуем ответ в формат JSON
       return response.json();
     })
   .then(data => {
+    // Получаем сокращенный URL из ответа сервера
     const shortUrl = data.shorten_url;
 
+    // Получаем элементы DOM для отображения результата
     let resultElement = document.querySelector("#short-url");
     let resultTextElement = document.querySelector("#result");
 
-
+    // Если элемент результата не существует, создаем его
     if (!resultElement) {
       resultElement = document.createElement("span");
       resultElement.id = "short-url";
       document.body.appendChild(resultElement);
     }
 
+    // Устанавливаем текст результата
     resultTextElement.textContent = "Short URL: ";
     resultElement.textContent = shortUrl;
 
-    // Копируем в буфер при клике по элементу
+    // Копируем сокращенный URL в буфер обмена при клике на элемент
     resultElement.addEventListener('click', function() {
         navigator.clipboard.writeText(shortUrl)
           .then(() => {
