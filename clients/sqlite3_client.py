@@ -112,7 +112,7 @@ class DatabaseManager:
 
     def is_url_in_db(self, short_url: str) -> bool:
         command = f'''
-        SELECT short_url FROM {self.table_name} WHERE short_url = ?;git 
+        SELECT short_url FROM {self.table_name} WHERE short_url = ?;
         '''
         self.execute_command(command, (short_url,))
         return bool(self.cursor.fetchone())

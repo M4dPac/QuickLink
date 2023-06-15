@@ -1,7 +1,7 @@
 import pytest
 
 from clients.sqlite3_client import DatabaseManager
-from tests.conftest import TEST_DB_URL
+from tests.tests_db.conftest import TEST_DB_URL
 
 
 def test_write_to_db_by_command(create_read_url_from_database_function):

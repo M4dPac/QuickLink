@@ -9,7 +9,7 @@ def check_url_for_validity(url: str) -> bool:
 def validate_url_status(url: str) -> bool:
     try:
         return urllib.request.urlopen(url).status == 200
-    except urllib.error.URLError:
+    except (urllib.error.HTTPError, urllib.error.URLError, ValueError):
         return False
 
 
@@ -19,3 +19,12 @@ def validate_url(url: str) -> bool:
     if match:
         return True
     return False
+
+
+if __name__ == "__main__":
+
+    urls = [('https://google.com', True), ('google.com', False), ('http://google.com', True), ('sdfsdfsf', False)]
+    for url, status in urls:
+        assert validate_url(url) == status, f"{url = }, {status = }"
+        assert validate_url_status(url) == status, f"{url = }, {status = }"
+        assert check_url_for_validity(url) == status, f"{url = }, {status = }"

@@ -1,56 +1,62 @@
-body {
-    background-color: #292929;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 0;
+/* Reset some default styles */
+html, body {
+  margin: 0;
+  padding: 0;
 }
 
+/* Container styles */
 .container {
-    margin-top: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #2f2156;
+  color: #ffffff;
+  font-family: Arial, sans-serif;
 }
 
-form {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
+/* Form styles */
+#url-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 label {
-    font-size: 20px;
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 input[type="text"] {
-    padding: 10px;
-    width: 300px;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
+  width: 300px;
+  padding: 5px;
+  border: none;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 button[type="submit"] {
-    padding: 10px 20px;
-    background-color: #9b59b6;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  background-color: #5a2f78;
+  color: #ffffff;
+  cursor: pointer;
 }
 
-button[type="submit"]:hover {
-    background-color: #8e44ad;
-}
-
+/* Result styles */
 #result {
-    margin-top: 20px;
-    font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  background-color: #2f2156;
+  color: #ffffff;
+  font-size: 18px;
+  margin-top: 20px;
 }
 
 #short-url {
-    color: #9b59b6;
+  color: #ffbb00;
+  margin-left: 5px;
 }
