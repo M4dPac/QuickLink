@@ -1,15 +1,24 @@
 FROM python:3.11-slim
 
-RUN mkdir /streamlit
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
 
-COPY reqquirements.txt /streamlit
 
 WORKDIR /streamlit
 
-RUN pip install -r reqquirements.txt
+RUN apt-get update && \
+    apt-get install -y python3-dev
 
-COPY . /streamlit
+RUN pip install --upgrade pip
+RUN pip install poetry
+
+ADD pyproject.toml .
+
+RUN poetry config virtualenvs.create false
+RUN poetry install --no-root --no-interaction --no-ansi
 
 EXPOSE 8501
+
+COPY . .
 
 CMD ["streamlit", "run", "ui.py"]

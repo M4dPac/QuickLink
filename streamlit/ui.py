@@ -4,12 +4,15 @@ import requests
 import streamlit as st
 
 # взаимодействие с сервисом Fast API
-backend = 'http://fastapi:8000/get_short_url/'
+backend = 'http://localhost:8000/get_short_url/'
 
 
 def get_short_url(url):
-    response = requests.get(backend, data=url, timeout=20)
-    return response.json()['short_url']
+    data = {
+        'url': url
+    }
+    response = requests.post(backend, data=data, timeout=20)
+    return response
 
 
 st.set_page_config(
@@ -37,7 +40,7 @@ st.title('URL Shortener', anchor=False)
 text = st.text_input('Enter your link', max_chars=100, key=str, help='Enter your link here, max 100 characters.')
 if text:
     # short_url = get_short_url(text)
-    short_url = text
+    short_url = get_short_url(text)
 
     st.info(short_url)
     pyperclip.copy(short_url)

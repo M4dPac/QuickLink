@@ -7,8 +7,6 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.11"
-streamlit = "^1.25.0"
-pyperclip = "^1.8.2"
 fastapi = {extras = ["all"], version = "^0.100.0"}
 
 

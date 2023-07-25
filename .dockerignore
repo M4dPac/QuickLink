@@ -1,0 +1,10 @@
+.idea
+.pytest_cache
+.env
+.venv/
+*.db
+**/__pycashe__/
+clients/
+static/
+templates/
+tests/
